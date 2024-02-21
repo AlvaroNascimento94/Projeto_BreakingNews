@@ -1,12 +1,12 @@
-const express = require("express");
+import express from "express";
+import connectDataBase from './src/database/db.js'
+import useRoute from "./src/routes/userRouter.js";
+
 const app = express();
-const connectDataBase = require('./src/database/db')
-
-const useRoute = require("./src/routes/userRouter");
-
 const PORT = 3333;
 
 connectDataBase()
+
 app.use(express.json())
 
 app.use("/user", useRoute);
