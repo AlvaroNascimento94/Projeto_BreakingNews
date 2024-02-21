@@ -1,5 +1,6 @@
 import userService from "../services/userServices.js";
 import User from "../models/User.js";
+import bcrypt from "bcrypt";
 
 const create = async (req, res) => {
   try {
@@ -72,12 +73,14 @@ const update = async (req, res) => {
 
     const { id, user } = req;
 
+    const newPassword = await bcrypt.hash(password, 10);
+
     await userService.updateService(
       id,
       name,
       username,
       email,
-      password,
+      newPassword,
       avatar,
       background
     );
