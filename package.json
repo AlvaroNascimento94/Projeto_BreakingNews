@@ -4,13 +4,14 @@
   "description": "API for SPA Breaking News",
   "main": "index.js",
   "type": "module",
-    "scripts": {
+  "scripts": {
     "start": "node index",
     "dev": "nodemon index"
   },
   "author": "Alvaro ",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^5.1.1",
     "dotenv": "^16.4.4",
     "express": "^4.18.2",
     "mongoose": "^8.1.2"
