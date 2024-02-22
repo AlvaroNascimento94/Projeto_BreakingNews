@@ -17,7 +17,7 @@ const create = async (req, res) => {
         .send({ message: "Username or email already exists" });
     }
 
-    const user = await userService.createService(req.body);
+    const user = await userService.createService(req.body).catch((err)=>console.log(err.message));
 
     if (!user) {
       return res.status(400).send({ message: "Error creating user" });

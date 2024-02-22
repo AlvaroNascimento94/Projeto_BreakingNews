@@ -4,7 +4,7 @@ import dotenv from "dotenv"
 
 import useRoute from "./src/routes/userRouter.js";
 import authRoute from "./src/routes/authRouter.js";
-import newsRoute from "./src/routes/newsRouter.js.js"
+import newsRoute from "./src/routes/newsRouter.js"
 
 dotenv.config()
 
