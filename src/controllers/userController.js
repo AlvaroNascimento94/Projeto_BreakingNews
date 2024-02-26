@@ -17,7 +17,9 @@ const create = async (req, res) => {
         .send({ message: "Username or email already exists" });
     }
 
-    const user = await userService.createService(req.body).catch((err)=>console.log(err.message));
+    const user = await userService
+      .createService(req.body)
+      .catch((err) => console.log(err.message));
 
     if (!user) {
       return res.status(400).send({ message: "Error creating user" });
@@ -66,14 +68,14 @@ const findId = async (req, res) => {
 const update = async (req, res) => {
   try {
     const { name, username, email, password, avatar, background } = req.body;
-
     if (!name && !username && !email && !password && !avatar && !background) {
       res.status(400).send({ message: "Submit at least one field for update" });
     }
 
     const { id, user } = req;
 
-    const newPassword = await bcrypt.hash(password, 10);
+    const newPassword =
+      password !== undefined ? await bcrypt.hash(password, 10) : undefined;
 
     await userService.updateService(
       id,
