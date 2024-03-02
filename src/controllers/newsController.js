@@ -8,7 +8,12 @@ const create = async (req, res) => {
       res.status(400).send({ message: "Submit all fields for registration" });
     }
 
-    await createService({title, text, banner, user:{_id:"65d673ca35ac897c79922c0e"}})
+    await createService({
+      title,
+      text,
+      banner,
+      user: req.userId,
+    });
 
     res.send("created");
   } catch (error) {
@@ -16,7 +21,7 @@ const create = async (req, res) => {
   }
 };
 const findAll = async (req, res) => {
-  const news = await findAllService()
+  const news = await findAllService();
   if (news.length === 0) {
     return res.status(400).send("There are no registered news");
   }
