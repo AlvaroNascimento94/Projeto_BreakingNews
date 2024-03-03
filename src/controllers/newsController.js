@@ -3,7 +3,8 @@ import {
   findAllService,
   countNews,
   topNewsService,
-  findByIdService
+  findByIdService,
+  searchByTitleService,
 } from "../services/newsServices.js";
 
 export const create = async (req, res) => {
@@ -106,26 +107,57 @@ export const topNews = async (req, res) => {
   }
 };
 
-export const findById = async (req, res) =>{
-try {
-  const {id} = req.params
-  
-  const news = await findByIdService(id)
+export const findById = async (req, res) => {
+  try {
+    const { id } = req.params;
 
-  return res.send({
-    news: {
-      id: news._id,
-      title: news.title,
-      text: news.text,
-      banner: news.banner,
-      likes: news.likes,
-      comments: news.comments,
-      name: news.user.name,
-      username: news.user.username,
-      userAvatar: news.user.avatar,
-    },
-  })
-} catch (error) {
-  res.status(500).send({ message: error.message });
-}
-}
+    const news = await findByIdService(id);
+
+    return res.send({
+      news: {
+        id: news._id,
+        title: news.title,
+        text: news.text,
+        banner: news.banner,
+        likes: news.likes,
+        comments: news.comments,
+        name: news.user.name,
+        username: news.user.username,
+        userAvatar: news.user.avatar,
+      },
+    });
+  } catch (error) {
+    res.status(500).send({ message: error.message });
+  }
+};
+
+export const searchByTitle = async (req, res) => {
+  try {
+    const { title } = req.query;
+
+    const news = await searchByTitleService(title);
+
+    if (news.length === 0) {
+      return res
+        .status(400)
+        .send({ message: "There are no news with this title" });
+    }
+
+    return res.send({
+      resulto: news.map((itens) => ({
+        id: itens._id,
+        title: itens.title,
+        text: itens.text,
+        banner: itens.banner,
+        likes: itens.likes,
+        comments: itens.comments,
+        name: itens.user.name,
+        username: itens.user.username,
+        userAvatar: itens.user.avatar,
+      }))
+    });
+    
+  } catch (error) {
+    res.status(500).send({ message: error.message });
+  }
+};
