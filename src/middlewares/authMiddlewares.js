@@ -35,7 +35,7 @@ export const authMiddleware = (req, res, next) => {
         return res.status(401).send({ message: "Invalid token" });
       }
 
-      req.userId = user._id;
+      req.userId = user.id;
       
       return next();
     });

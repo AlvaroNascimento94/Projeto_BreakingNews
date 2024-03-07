@@ -6,6 +6,7 @@ import {
   findByIdService,
   searchByTitleService,
   byUserService,
+  updateService,
 } from "../services/newsServices.js";
 
 export const create = async (req, res) => {
@@ -28,6 +29,7 @@ export const create = async (req, res) => {
     res.status(500).send({ message: error.message });
   }
 };
+
 export const findAll = async (req, res) => {
   try {
     let { limit, offset } = req.query;
@@ -145,7 +147,7 @@ export const searchByTitle = async (req, res) => {
     }
 
     return res.send({
-      resulto: news.map((itens) => ({
+      result: news.map((itens) => ({
         id: itens._id,
         title: itens.title,
         text: itens.text,
@@ -166,9 +168,9 @@ export const byUser = async (req, res) => {
   try {
     const id = req.userId;
     const news = await byUserService(id);
-  
+
     return res.send({
-      resulto: news.map((itens) => ({
+      result: news.map((itens) => ({
         id: itens._id,
         title: itens.title,
         text: itens.text,
@@ -180,6 +182,30 @@ export const byUser = async (req, res) => {
         userAvatar: itens.user.avatar,
       })),
     });
+  } catch (error) {
+    res.status(500).send({ message: error.message });
+  }
+};
+
+export const update = async (req, res) => {
+  try {
+    const { title, text, banner } = req.body;
+    const { id } = req.params;
+
+    if (!title && !banner && !text) {
+      res.status(400).send({ message: "Submit all fields for registration" });
+    }
+
+    const news = await findByIdService(id);
+
+    if (String(news.user._id) !== req.userId) {
+      return res.status(400).send({
+        message: " You didn't updat this post",
+      });
+    }
+    await updateService(id, title, text, banner);
+
+    return res.send({ message: "Post successfully updated!" });
   } catch (error) {
     res.status(500).send({ message: error.message });
   }
