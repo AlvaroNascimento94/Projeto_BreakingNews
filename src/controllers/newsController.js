@@ -7,6 +7,7 @@ import {
   searchByTitleService,
   byUserService,
   updateService,
+  deleteService,
 } from "../services/newsServices.js";
 
 export const create = async (req, res) => {
@@ -206,6 +207,23 @@ export const update = async (req, res) => {
     await updateService(id, title, text, banner);
 
     return res.send({ message: "Post successfully updated!" });
+  } catch (error) {
+    res.status(500).send({ message: error.message });
+  }
+};
+
+export const deletePost = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const news = await findByIdService(id);
+
+    if (String(news.user._id) !== req.userId) {
+      return res.status(400).send({ message: "You didn't delete this post" });
+    }
+
+    await deleteService(id);
+
+    return res.send({ message: "News deleted successfully" });
   } catch (error) {
     res.status(500).send({ message: error.message });
   }

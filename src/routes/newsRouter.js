@@ -6,7 +6,7 @@ import {
   findById,
   searchByTitle,
   byUser,
-  update
+  update, deletePost
 } from "../controllers/newsController.js";
 import { authMiddleware } from "../middlewares/authMiddlewares.js";
 
@@ -21,6 +21,8 @@ router.get("/byUser", authMiddleware, byUser);
 router.get("/:id", authMiddleware, findById);
 
 router.patch("/:id", authMiddleware, update)
+
+router.delete("/:id", authMiddleware, deletePost)
 
 
 export default router;
