@@ -5,6 +5,7 @@ import dotenv from "dotenv"
 import useRoute from "./src/routes/userRouter.js";
 import authRoute from "./src/routes/authRouter.js";
 import newsRoute from "./src/routes/newsRouter.js"
+import swaggerRoute from "./src/routes/swaggerRoute.js"
 
 dotenv.config()
 
@@ -16,6 +17,7 @@ app.use(express.json())
 app.use("/user", useRoute);
 app.use("/auth", authRoute);
 app.use("/news", newsRoute);
+app.use("/doc", swaggerRoute)
 
 
 app.listen(PORT, () => console.log(`Servidor na porta ${PORT}`));
