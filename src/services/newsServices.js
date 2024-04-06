@@ -2,8 +2,14 @@ import News from "../models/News.js";
 
 export const createService = (body) => News.create(body);
 
-export const findAllService = (offset, limit) =>
-  News.find().sort({ _id: -1 }).skip(offset).limit(limit).populate("user");
+export const findAllService = async (offset, limit) =>
+  await News.find()
+    .sort({ _id: -1 })
+    .skip(offset)
+    .limit(limit)
+    .populate("user")
+    .populate("likes")
+    .populate("comments");
 
 export const countNews = () => News.countDocuments();
 
@@ -36,5 +42,25 @@ export const likeNewsService = (idNews, userId) =>
     { _id: idNews, "likes.userId": { $nin: [userId] } },
     { $push: { likes: { userId, createsAt: new Date() } } }
   );
+
 export const deleteLikeNews = (idNews, userId) =>
   News.findOneAndUpdate({ _id: idNews }, { $pull: { likes: { userId } } });
+
+export const addComentService = (idNews, comment, userId) => {
+  const idComment = Math.floor(Date.now() * Math.random()).toString(36);
+
+  return News.findOneAndUpdate(
+    { _id: idNews },
+    {
+      $push: {
+        comments: { idComment, userId, comment, createsAt: new Date() },
+      },
+    }
+  );
+};
+
+export const deleteCommentService = (idNews, idComment, userId) =>
+  News.findByIdAndUpdate(
+    { _id: idNews },
+    { $pull: { comments: { idComment, userId } } }
+  );
