@@ -1,17 +1,18 @@
 import logo from "../../images/LogoBN.png"
 import { IoIosSearch } from "react-icons/io";
-import "./Navbar.css"
+import { Button, Nav, ImageLogo, InputSpace } from './NavBasStyled';
+
 export function NavBar() {
   return (
     <>
-      <nav>
-        <div className="input-search-space">
+      <Nav>
+        <InputSpace>
             <IoIosSearch className="search" />
             <input type="text" placeholder="Pesquise por um titulo" />
-        </div>
-        <img src={logo} alt="Logo Breaking News" />
-        <button>Entrar</button>
-      </nav>
+        </InputSpace>
+        <ImageLogo src={logo} alt="Logo Breaking News" />
+        <Button>Entrar</Button>
+      </Nav>
     </>
   );
 }
