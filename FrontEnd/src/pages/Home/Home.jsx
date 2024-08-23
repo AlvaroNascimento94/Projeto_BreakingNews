@@ -1,10 +1,14 @@
+import { Card } from "../../components/Card/Card.jsx";
 import { NavBar } from "../../components/NavBar/NavBar";
+import { news } from "../../Data.js";
 
 export default function Home() {
   return (
-    <section>
+    <>
       <NavBar />
-      <h1>Ola Home</h1>
-    </section>
+      {news.map((item, index) => (
+        <Card key={index} news={item} />
+      ))}
+    </>
   );
 }
