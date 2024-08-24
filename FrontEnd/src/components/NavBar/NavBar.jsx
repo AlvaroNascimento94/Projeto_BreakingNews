@@ -1,8 +1,9 @@
 import logo from "../../images/LogoBN.png"
 import { IoIosSearch } from "react-icons/io";
-import { Button, Nav, ImageLogo, InputSpace } from './NavBasStyled';
+import { Button, Nav, ImageLogo, InputSpace } from './NavBarStyled';
 
 export function NavBar() {
+  
   return (
     <>
       <Nav>

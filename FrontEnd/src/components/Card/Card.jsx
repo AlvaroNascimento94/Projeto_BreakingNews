@@ -1,19 +1,32 @@
-import { BsHandThumbsUp, BsHandThumbsUpFill, BsChatLeft, BsChatLeftDots } from "react-icons/bs";
+import {
+  BsHandThumbsUp,
+  BsHandThumbsUpFill,
+  BsChatLeft,
+  BsChatLeftDots,
+} from "react-icons/bs";
+import { CardBody, CardConteiner, CardFoot } from "./CardStyled.jsx";
 
-export function Card({news}) {
-    console.log(news);
-    
-    return(
-    <section>
-        <h2>{news.title}</h2>
-        <p>{news.text}</p>
+export function Card({ news }) {
+  return (
+    <CardConteiner>
+      <CardBody>
+        <div>
+          <h2>{news.title}</h2>
+          <p>{news.text}</p>
+        </div>
         <img src={news.image} alt="Imagem" />
-        <BsHandThumbsUp/>
-        <span>{news.likes}</span>
-        <BsChatLeft/>
-        <span>{news.comments}</span>
+      </CardBody>
 
-    </section>    
-    )
-    
+      <CardFoot>
+        <div>
+          <BsHandThumbsUp />
+          <span>{news.likes}</span>
+        </div>
+        <div>
+          <BsChatLeft />
+          <span>{news.comments}</span>
+        </div>
+      </CardFoot>
+    </CardConteiner>
+  );
 }
