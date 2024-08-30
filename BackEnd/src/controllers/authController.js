@@ -11,4 +11,4 @@ const loginController = async (req, res) => {
     res.status(500).send(err.message);
   }
 };
-export { loginController };
+export default { loginController };

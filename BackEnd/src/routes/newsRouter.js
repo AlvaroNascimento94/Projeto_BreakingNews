@@ -1,6 +1,6 @@
 import newsController from "../controllers/newsController.js";
 import authMiddleware from "../middlewares/authMiddlewares.js";
-import { validId } from '../middlewares/globalMiddlewares';
+import { validId } from '../middlewares/globalMiddlewares.js';
 
 import { Router } from "express";
 
@@ -15,12 +15,12 @@ newsRouter.post("/create", newsController.createNewsController);
 
 newsRouter.use(validId)
 newsRouter.get("/byIdPost/:id", newsController.findNewsByIdController);
-postRouter.get("/byUserId", newsController.findNewsByUserIdController);
-postRouter.patch("/update/:id", newsController.updateNewsController);
-postRouter.delete("/delete/:id", newsController.deleteNewsController);
-postRouter.patch("/:id/like", newsController.likeNewsController);
-postRouter.patch("/:id/comment", newsController.commentNewsController);
-postRouter.patch(
+newsRouter.get("/byUserId", newsController.findNewsByUserIdController);
+newsRouter.patch("/update/:id", newsController.updateNewsController);
+newsRouter.delete("/delete/:id", newsController.deleteNewsController);
+newsRouter.patch("/:id/like", newsController.likeNewsController);
+newsRouter.patch("/:id/comment", newsController.commentNewsController);
+newsRouter.patch(
   "/:id/:idComment/comment",
   newsController.commentDeleteNewsController
 );

@@ -1,5 +1,5 @@
 import userController from "../controllers/userController.js";
-import authMiddleware from "../middlewares/authMiddlewares";
+import authMiddleware from "../middlewares/authMiddlewares.js";
 import { validId } from "../middlewares/globalMiddlewares.js";
 
 
