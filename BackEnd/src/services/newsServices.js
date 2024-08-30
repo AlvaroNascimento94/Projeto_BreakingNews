@@ -1,66 +1,208 @@
-import News from "../models/News.js";
+import newsRepositories from "../repositories/newsRepositories.js";
 
-export const createService = (body) => News.create(body);
-
-export const findAllService = async (offset, limit) =>
-  await News.find()
-    .sort({ _id: -1 })
-    .skip(offset)
-    .limit(limit)
-    .populate("user")
-    .populate("likes")
-    .populate("comments");
-
-export const countNews = () => News.countDocuments();
-
-export const topNewsService = () =>
-  News.findOne().sort({ _id: -1 }).populate("user");
-
-export const findByIdService = (id) => News.findById(id).populate("user");
-
-export const searchByTitleService = (title) =>
-  News.find({
-    title: { $regex: `${title || ""}`, $options: "i" },
-  })
-    .sort({ _id: -1 })
-    .populate("user");
-
-export const byUserService = (id) =>
-  News.find({ user: id }).sort({ _id: -1 }).populate("user");
-
-export const updateService = (id, title, text, banner) =>
-  News.findOneAndUpdate(
-    { _id: id },
-    { title, text, banner },
-    { rawResult: true }
+async function createNewsService({ title, banner, text }, userId) {
+  if (!title || !banner || !text)
+    throw new Error("Submit all field for registration");
+  
+  const { id } = await newsRepositories.createNewsRepository(
+    title,
+    banner,
+    text,
+    userId
   );
 
-export const deleteService = (id) => News.findOneAndDelete({ _id: id });
+  return {
+    message: "Post created sucessfully",
+    post: { id, title, banner, text },
+  };
+}
 
-export const likeNewsService = (idNews, userId) =>
-  News.findOneAndUpdate(
-    { _id: idNews, "likes.userId": { $nin: [userId] } },
-    { $push: { likes: { userId, createsAt: new Date() } } }
-  );
+async function findAllNewsService(limit, offset, currentUrl) {
+  limit = Number(limit);
+  offset = Number(offset);
 
-export const deleteLikeNews = (idNews, userId) =>
-  News.findOneAndUpdate({ _id: idNews }, { $pull: { likes: { userId } } });
+  if (!limit) {
+    limit = 5;
+  }
 
-export const addComentService = (idNews, comment, userId) => {
-  const idComment = Math.floor(Date.now() * Math.random()).toString(36);
+  if (!offset) {
+    offset = 0;
+  }
 
-  return News.findOneAndUpdate(
-    { _id: idNews },
-    {
-      $push: {
-        comments: { idComment, userId, comment, createsAt: new Date() },
-      },
-    }
-  );
+  const news = await newsRepositories.findAllNewsRepository(offset,limit)
+
+  const total = await newsRepositories.countNews()
+
+  const next = offset + limit;
+  const nextUrl =
+    next < total ? `${currentUrl}?limit=${limit}&offset=${next}` : null;
+
+  const previous = offset - limit < 0 ? null : offset - limit;
+  const previousUrl =
+    previous != null ? `${currentUrl}?limit=${limit}&offset=${previous}` : null;
+
+  posts.shift();
+
+  return{
+    nextUrl,
+    previousUrl,
+    limit,
+    offset,
+    total,
+
+    results: news.map((post) =>({
+      id: post._id,
+      title:post.title,
+      banner: post.banner,
+      text: post.text,
+      likes: post.likes,
+      comments: post.comments,
+      name:post.user.name,
+      username: post.user.username,
+      avatar: post.user.avatar,
+    }))
+  }
+}
+
+async function topNewsService() {
+  const news = await newsRepositories.topNewsRepository();
+
+  if (!news) throw new Error("There is no registered news");
+
+  return {
+    news: {
+      id: news._id,
+      title: news.title,
+      banner: news.banner,
+      text: news.text,
+      likes: news.likes,
+      comments: news.comments,
+      name: news.user.name,
+      username: news.user.username,
+      avatar: news.user.avatar,
+    },
+  };
+}
+
+async function searchNewsService(title) {
+  const foundNews = await newsRepositories.searchNewsRepository(title);
+
+  if (foundNews.length === 0)
+    throw new Error("There are no news with this title");
+
+  return {
+    foundNews: foundNews.map((news) => ({
+      id: news._id,
+      title: news.title,
+      banner: news.banner,
+      text: news.text,
+      likes: news.likes,
+      comments: news.comments,
+      name: news.user.name,
+      username: news.user.username,
+      avatar: news.user.avatar,
+    })),
+  };
+}
+
+async function findNewsByIdService(id) {
+  const news = await newsRepositories.findNewsByIdRepository(id);
+
+  if (!news) throw new Error("News not found");
+
+  return {
+    id: news._id,
+    title: news.title,
+    banner: news.banner,
+    text: news.text,
+    likes: news.likes,
+    comments: news.comments,
+    name: news.user.name,
+    username: news.user.username,
+    avatar: news.user.avatar,
+  };
+}
+
+async function findNewsByUserIdService(id) {
+  const news = await newsRepositories.findNewsByUserIdRepository(id);
+
+  return {
+    newsByUser: news.map((post) => ({
+      id: post._id,
+      title: post.title,
+      banner: post.banner,
+      text: post.text,
+      likes: post.likes,
+      comments: post.comments,
+      name: post.user.name,
+      username: post.user.username,
+      avatar: post.user.avatar,
+    })),
+  };
+}
+
+async function updateNewsService(id, title, banner, text, userId) {
+  if (!title && !banner && !text)
+    throw new Error("Submit at least one field to update the news");
+
+  const news = await newsRepositories.findNewsByIdRepository(id);
+
+  if (!news) throw new Error("Post not found");
+
+  if (news.user._id != userId) throw new Error("You didn't create this news");
+
+  await newsRepositories.updateNewsRepository(id, title, banner, text);
+}
+
+async function deleteNewsService(id, userId) {
+  const news = await newsRepositories.findNewsByIdRepository(id);
+
+  if (!news) throw new Error("News not found");
+
+  if (news.user._id != userId) throw new Error("You didn't create this news");
+
+  await newsRepositories.deleteNewsRepository(id);
+}
+
+async function likeNewsService(id, userId) {
+  const postLiked = await postServices.likesService(id, userId);
+
+  if (postLiked.lastErrorObject.n === 0) {
+    await postService.likesDeleteService(id, userId);
+    return { message: "Like successfully removed" };
+  }
+
+  return { message: "Like done successfully" };
+}
+
+async function commentPostService(newsId, message, userId) {
+  if (!message) throw new Error("Write a message to comment");
+
+  const news = await newsRepositories.findNewsByIdRepository(newsId);
+
+  if (!news) throw new Error("News not found");
+
+  await newsRepositories.commentsRepository(newsId, message, userId);
+}
+
+async function commentDeletePostService(newsId, userId, idComment) {
+  const news = await newsRepositories.findNewsByIdRepository(newsId);
+
+  if (!news) throw new Error("News not found");
+
+  await newsRepositories.commentsDeleteRepository(newsId, userId, idComment);
+}
+
+export default {
+  createNewsService,
+  findAllNewsService,
+  topNewsService,
+  searchNewsService,
+  findNewsByIdService,
+  findNewsByUserIdService,
+  updateNewsService,
+  deleteNewsService,
+  likeNewsService,
+  commentPostService,
+  commentDeletePostService,
 };
-
-export const deleteCommentService = (idNews, idComment, userId) =>
-  News.findByIdAndUpdate(
-    { _id: idNews },
-    { $pull: { comments: { idComment, userId } } }
-  );

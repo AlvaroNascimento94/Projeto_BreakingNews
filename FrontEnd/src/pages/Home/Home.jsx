@@ -3,24 +3,33 @@ import { NavBar } from "../../components/NavBar/NavBar";
 //import { news } from "../../Data.js";
 import { getAllNews } from "../../services/postServices.js";
 import { HomeBody } from "./HomeStyled.jsx";
+import { useEffect, useState } from "react";
 
 export default function Home() {
-let news;
+  const [news, setNews] = useState([]);
+
   async function findAllNews() {
     const response = await getAllNews();
-    news = response.data.results;
+    setNews(response.data.results);
   }
 
-  findAllNews();
-  console.log(news);
-  
+  useEffect(() =>{
+    findAllNews();
+  },[])
 
   return (
     <>
       <NavBar />
       <HomeBody>
-        {news.map((item, index) => (
-          <Card key={index} news={item} />
+        {news.map((item) => (
+          <Card
+            key={item.id}
+            title={item.title}
+            text={item.text}
+            banner={item.banner}
+            likes= {item.likes.length}
+            comments= {item.comments.length}
+          />
         ))}
       </HomeBody>
     </>

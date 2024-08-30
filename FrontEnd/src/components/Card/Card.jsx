@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import {
   BsHandThumbsUp,
   BsHandThumbsUpFill,
@@ -5,26 +6,27 @@ import {
   BsChatLeftDots,
 } from "react-icons/bs";
 import { CardBody, CardConteiner, CardFoot } from "./CardStyled.jsx";
+import { TextLimit } from "../TextLimit/TextLimit.jsx";
 
-export function Card({ news }) {
+export function Card(props) {
   return (
     <CardConteiner>
       <CardBody>
         <div>
-          <h2>{news.title}</h2>
-          <p>{news.text}</p>
+          <h2>{props.title}</h2>
+          <img src={props.banner} alt="Imagem" />
         </div>
-        <img src={news.image} alt="Imagem" />
+        <TextLimit text={props.text} limit={150} />
       </CardBody>
 
       <CardFoot>
         <div>
           <BsHandThumbsUp />
-          <span>{news.likes}</span>
+          <span>{props.likes}</span>
         </div>
         <div>
           <BsChatLeft />
-          <span>{news.comments}</span>
+          <span>{props.comments}</span>
         </div>
       </CardFoot>
     </CardConteiner>

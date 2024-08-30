@@ -12,11 +12,16 @@ export const CardConteiner = styled.section`
 `;
 export const CardBody = styled.article`
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 1rem;
   h2 {
     margin-bottom: 1rem;
+  }
+  div{
+    display: flex;
+    align-items: center;
   }
   img {
     width: 30%;
