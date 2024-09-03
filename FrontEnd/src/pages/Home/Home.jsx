@@ -1,25 +1,39 @@
+import { useEffect, useState } from "react";
+
 import { Card } from "../../components/Card/Card.jsx";
 import { NavBar } from "../../components/NavBar/NavBar";
-//import { news } from "../../Data.js";
-import { getAllNews } from "../../services/postServices.js";
-import { HomeBody } from "./HomeStyled.jsx";
-import { useEffect, useState } from "react";
+import { getAllNews, getTopNews } from "../../services/postServices.js";
+import { HomeBody, HomeHeader } from "./HomeStyled.jsx";
 
 export default function Home() {
   const [news, setNews] = useState([]);
+  const [topNews, setTopNews] = useState({});
 
   async function findAllNews() {
-    const response = await getAllNews();
-    setNews(response.data.results);
+    const newsResponse = await getAllNews();
+    setNews(newsResponse.data.results);
+
+    const topNewsResponse = await getTopNews();
+    setTopNews(topNewsResponse.data.news);
   }
 
-  useEffect(() =>{
+  useEffect(() => {
     findAllNews();
-  },[])
+  }, []);
 
   return (
     <>
       <NavBar />
+      <HomeHeader>
+        <Card
+          top={true}
+          title={topNews.title}
+          text={topNews.text}
+          banner={topNews.banner}
+          likes={topNews.likes}
+          comments={topNews.comments}
+        />
+      </HomeHeader>
       <HomeBody>
         {news.map((item) => (
           <Card
@@ -27,8 +41,8 @@ export default function Home() {
             title={item.title}
             text={item.text}
             banner={item.banner}
-            likes= {item.likes.length}
-            comments= {item.comments.length}
+            likes={item.likes}
+            comments={item.comments}
           />
         ))}
       </HomeBody>

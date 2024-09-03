@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 import {
   BsHandThumbsUp,
@@ -5,30 +6,36 @@ import {
   BsChatLeft,
   BsChatLeftDots,
 } from "react-icons/bs";
-import { CardBody, CardConteiner, CardFoot } from "./CardStyled.jsx";
+import {
+  CardBody,
+  CardConteiner,
+  CardFoot,
+  CardHeader,
+} from "./CardStyled.jsx";
 import { TextLimit } from "../TextLimit/TextLimit.jsx";
 
 export function Card(props) {
   return (
     <CardConteiner>
-      <CardBody>
+      <CardBody >
         <div>
-          <h2>{props.title}</h2>
-          <img src={props.banner} alt="Imagem" />
+          <CardHeader top={props.top}>
+            <h2>{props.title}</h2>
+            <TextLimit text={props.text} limit={150} />
+          </CardHeader>
+          <CardFoot>
+            <section>
+              <BsHandThumbsUp />
+              <span>{props.likes?.length}</span>
+            </section>
+            <section>
+              <BsChatLeft />
+              <span>{props.comments?.length}</span>
+            </section>
+          </CardFoot>
         </div>
-        <TextLimit text={props.text} limit={150} />
+        <img src={props.banner} alt="Imagem" />
       </CardBody>
-
-      <CardFoot>
-        <div>
-          <BsHandThumbsUp />
-          <span>{props.likes}</span>
-        </div>
-        <div>
-          <BsChatLeft />
-          <span>{props.comments}</span>
-        </div>
-      </CardFoot>
     </CardConteiner>
   );
 }

@@ -26,7 +26,7 @@ async function findAllNewsService(limit, offset, currentUrl) {
   }
 
   if (!offset) {
-    offset = 0;
+    offset = 1;
   }
 
   const news = await newsRepositories.findAllNewsRepository(offset,limit)
@@ -41,7 +41,7 @@ async function findAllNewsService(limit, offset, currentUrl) {
   const previousUrl =
     previous != null ? `${currentUrl}?limit=${limit}&offset=${previous}` : null;
 
-  posts.shift();
+  //posts.shift();
 
   return{
     nextUrl,
