@@ -1,6 +1,7 @@
 import logo from "../../images/LogoBN.png"
 import { IoIosSearch } from "react-icons/io";
 import { Button, Nav, ImageLogo, InputSpace } from './NavBarStyled';
+import { Outlet } from "react-router-dom";
 
 export function NavBar() {
   
@@ -14,6 +15,7 @@ export function NavBar() {
         <ImageLogo src={logo} alt="Logo Breaking News" />
         <Button>Entrar</Button>
       </Nav>
+      <Outlet/>
     </>
   );
 }

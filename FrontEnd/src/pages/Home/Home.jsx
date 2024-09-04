@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 
 import { Card } from "../../components/Card/Card.jsx";
-import { NavBar } from "../../components/NavBar/NavBar";
 import { getAllNews, getTopNews } from "../../services/postServices.js";
 import { HomeBody, HomeHeader } from "./HomeStyled.jsx";
 
@@ -23,7 +22,6 @@ export default function Home() {
 
   return (
     <>
-      <NavBar />
       <HomeHeader>
         <Card
           top={true}
