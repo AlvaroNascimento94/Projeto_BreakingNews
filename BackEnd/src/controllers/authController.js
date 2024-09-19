@@ -8,7 +8,9 @@ const loginController = async (req, res) => {
     const token = await authServices.loginService({email,password})
     return res.send(token)
   } catch (error) {
-    res.status(500).send(err.message);
+    res.status(500).send(error.message);
+    console.log(error);
+    
   }
 };
 export default { loginController };

@@ -1,19 +1,12 @@
 import logo from "../../images/LogoBN.png";
 import { IoIosSearch } from "react-icons/io";
-import { Button, Nav, ImageLogo, InputSpace, ErrorSpan } from "./NavBarStyled";
+import { Nav, ImageLogo, InputSpace, ErrorSpan } from "./NavBarStyled";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Button } from "../Button/Button";
+import { searchSchema } from "../../schemas/searchSchema";
 
-const searchSchema = z.object({
-  title: z
-    .string()
-    .min(1, { message: "A pesquisa não pode ser vazia" })
-    .refine((value) => !/^\s*$/.test(value), {
-      message: "A pesquisa não pode conter apenas espaços",
-    }),
-});
 
 export function NavBar() {
   const {
@@ -31,6 +24,7 @@ export function NavBar() {
     navigate(`/search/${title}`);
     reset();
   }
+
   return (
     <>
       <Nav>
@@ -49,7 +43,9 @@ export function NavBar() {
         <Link to="/">
           <ImageLogo src={logo} alt="Logo Breaking News" />
         </Link>
-        <Button>Entrar</Button>
+        <Link to="/auth">
+          <Button type="button" text="Entrar"></Button>
+        </Link>
       </Nav>
       {errors.title && <ErrorSpan>{errors.title.message}</ErrorSpan>}
       <Outlet />

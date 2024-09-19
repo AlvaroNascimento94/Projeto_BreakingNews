@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { searchNews } from "../../services/postServices";
 import { Card } from "../../components/Card/Card";
@@ -8,7 +8,7 @@ export function Search() {
   const { title } = useParams();
   const [post, setPost] = useState([]);
 
-  async function search() {
+  const search = useCallback(async () => {
     try {
       const postsApi = await searchNews(title);
       setPost(postsApi.data.foundNews);
@@ -17,10 +17,11 @@ export function Search() {
       console.log(err);
       setPost([]);
     }
-  }
+  }, [title]);
+
   useEffect(() => {
     search();
-  }, [title]);
+  }, [search]);
 
   return (
     <ContainerResults>
@@ -30,7 +31,7 @@ export function Search() {
             ? `Encontramos ${post.length} ${
                 post.length > 1 ? "resultados" : "resultado"
               } para:`
-            : "Não encontramos reultados para"}
+            : "Não encontramos resultados para"}
         </span>
         <h2>{title}</h2>
       </TestResults>

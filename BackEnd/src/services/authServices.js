@@ -1,15 +1,15 @@
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import "dotenv/config";
-import userRepositories from "../repositories/userRepositories.js";
+import authRepositories from "../repositories/authRepositories.js"
 
 function generateToken(id) {
   return jwt.sign({ id: id }, process.env.SECRET, { expiresIn: 86400 });
 }
 
 const loginService = async ({ email, password }) => {
-  const user = await userRepositories.findAllRepository(email);
-
+  const user = await authRepositories.loginRepository(email)
+  
   if (!user) throw new Error("Wrong password or username");
 
   const isPasswordValid = await bcrypt.compare(password, user.password);
