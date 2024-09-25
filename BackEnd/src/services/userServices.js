@@ -1,6 +1,6 @@
 import userRepositories from "../repositories/userRepositories.js";
 import User from "../models/User.js";
-import bcrypt from "bcrypt";
+import authServices from "./authServices.js";
 
 const createServices = async (body) => {
   const { name, username, email, password, avatar, background } = body;
@@ -16,7 +16,10 @@ const createServices = async (body) => {
 
   if (!user) throw new Error("Error creating user");
 
+  const token = authServices.generateToken(user.id);
+
   return {
+    token,
     user: {
       id: user._id,
       name,

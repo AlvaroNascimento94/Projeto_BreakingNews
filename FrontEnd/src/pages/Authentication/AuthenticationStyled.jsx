@@ -33,3 +33,14 @@ export const Section = styled.section`
     font-weight: 700;
   }
 `;
+export const Article = styled.article`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100px;
+  font-size: 2rem;
+  font-weight: 700;
+  position: fixed;
+  top: 0;
+  right: 2rem;
+`;

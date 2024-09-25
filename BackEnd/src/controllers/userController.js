@@ -6,7 +6,7 @@ async function createUserController(req, res) {
 
   try {
     const user = await userService.createServices(body);
-    return res.status(201).send({ user });
+    return res.status(201).send(user);
   } catch (error) {
     return res.status(500).send({ message: error.message });
   }

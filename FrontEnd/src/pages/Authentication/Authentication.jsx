@@ -1,37 +1,50 @@
 import { Button } from "../../components/Button/Button";
 import { Input } from "../../components/Input/Input";
-import { AuthContainer, Section } from "./AuthenticationStyled";
+import { Article, AuthContainer, Section } from "./AuthenticationStyled";
 import { useForm } from "react-hook-form";
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signinSchema } from "../../schemas/signinSchema";
 import { signupSchema } from "../../schemas/signupSchema";
 import { ErrorSpan } from "../../components/NavBar/NavBarStyled";
+import { Link } from "react-router-dom";
+import { signup } from '../../services/userServices';
 
 export function Authentication() {
   const {
     register: registerSignup,
     handleSubmit: handleSubmitSignup,
     formState: { errors: errorsSignup },
-  } = useForm( {resolver: zodResolver(signupSchema)});
+  } = useForm({ resolver: zodResolver(signupSchema) });
 
-  const signupSchemma = z.object({})
+  const signupSchemma = z.object({});
 
   const {
     register: registerSignin,
     handleSubmit: handleSubmitSignin,
     formState: { errors: errorsSignin },
-  } = useForm({resolver: zodResolver(signinSchema)});
+  } = useForm({ resolver: zodResolver(signinSchema) });
 
   function inHandleSubmit(data) {
     console.log(data);
   }
-  function upHandleSubmit(data) {
-    console.log(data);
+  async function upHandleSubmit(data) {
+    try {
+      const response = await signup(data);
+      console.log(response);
+      
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   return (
     <AuthContainer>
+      <Article>
+        <Link to="/">
+          <Button type="button" text="Voltar" id="voltar" />
+        </Link>
+      </Article>
       <Section type="signin">
         <h2>Entrar</h2>
         <form onSubmit={handleSubmitSignin(inHandleSubmit)}>
@@ -41,17 +54,23 @@ export function Authentication() {
             name="email"
             register={registerSignin}
           />
-          {errorsSignin.email && <ErrorSpan >{errorsSignin.email.message}</ErrorSpan>}
+          {errorsSignin.email && (
+            <ErrorSpan>{errorsSignin.email.message}</ErrorSpan>
+          )}
           <Input
             type="password"
             placeholder="Senha"
             name={"password"}
             register={registerSignin}
           />
-          {errorsSignin.password && <ErrorSpan >{errorsSignin.password.message}</ErrorSpan>}
+          {errorsSignin.password && (
+            <ErrorSpan>{errorsSignin.password.message}</ErrorSpan>
+          )}
           <Button type="submit" text="Entrar" />
         </form>
       </Section>
+
+      
       <Section type="signup">
         <h2>Cadastrar</h2>
         <form onSubmit={handleSubmitSignup(upHandleSubmit)}>
@@ -61,28 +80,36 @@ export function Authentication() {
             name="name"
             register={registerSignup}
           />
-          {errorsSignup.name && <ErrorSpan >{errorsSignup.name.message}</ErrorSpan>}
+          {errorsSignup.name && (
+            <ErrorSpan>{errorsSignup.name.message}</ErrorSpan>
+          )}
           <Input
             type="email"
             placeholder="Email"
             name="email"
             register={registerSignup}
           />
-          {errorsSignup.email && <ErrorSpan >{errorsSignup.email.message}</ErrorSpan>}
+          {errorsSignup.email && (
+            <ErrorSpan>{errorsSignup.email.message}</ErrorSpan>
+          )}
           <Input
             type="password"
             placeholder="Senha"
             name="password"
             register={registerSignup}
           />
-          {errorsSignup.password && <ErrorSpan >{errorsSignup.password.message}</ErrorSpan>}
+          {errorsSignup.password && (
+            <ErrorSpan>{errorsSignup.password.message}</ErrorSpan>
+          )}
           <Input
             type="password"
             placeholder="Confirme a senha"
             name="confirmPassword"
             register={registerSignup}
           />
-          {errorsSignup.confirmPassword && <ErrorSpan >{errorsSignup.confirmPassword.message}</ErrorSpan>}
+          {errorsSignup.confirmPassword && (
+            <ErrorSpan>{errorsSignup.confirmPassword.message}</ErrorSpan>
+          )}
           <Button type="submit" text="Cadastrar" />
         </form>
       </Section>
