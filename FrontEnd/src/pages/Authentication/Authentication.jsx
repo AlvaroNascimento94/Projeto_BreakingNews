@@ -2,22 +2,23 @@ import { Button } from "../../components/Button/Button";
 import { Input } from "../../components/Input/Input";
 import { Article, AuthContainer, Section } from "./AuthenticationStyled";
 import { useForm } from "react-hook-form";
-import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signinSchema } from "../../schemas/signinSchema";
 import { signupSchema } from "../../schemas/signupSchema";
 import { ErrorSpan } from "../../components/NavBar/NavBarStyled";
 import { Link } from "react-router-dom";
-import { signup } from '../../services/userServices';
+import { signup, signin } from '../../services/userServices';
+import { useNavigate } from 'react-router-dom';
+import Cookies from 'js-cookie';
 
 export function Authentication() {
+  const navigate = useNavigate();
+  
   const {
     register: registerSignup,
     handleSubmit: handleSubmitSignup,
     formState: { errors: errorsSignup },
   } = useForm({ resolver: zodResolver(signupSchema) });
-
-  const signupSchemma = z.object({});
 
   const {
     register: registerSignin,
@@ -25,13 +26,20 @@ export function Authentication() {
     formState: { errors: errorsSignin },
   } = useForm({ resolver: zodResolver(signinSchema) });
 
-  function inHandleSubmit(data) {
-    console.log(data);
+  async function inHandleSubmit(data) {
+    try {
+      const response = await signin(data);
+      Cookies.set("token", response.data, { expires: 1});
+      navigate('/');
+    } catch (error) {
+      console.log(error);
+    }
   }
   async function upHandleSubmit(data) {
     try {
       const response = await signup(data);
-      console.log(response);
+      Cookies.set("token", response.data, { expires: 1});
+      navigate('/');
       
     } catch (error) {
       console.log(error);

@@ -16,6 +16,11 @@ export function signup(data) {
   return response;
 }
 
+export function signin(data) {
+  const response = axios.post(`${baseURL}/auth/login`, data);
+  return response;
+}
+
 function generateUserName(name){
     const withoutSpace = name.replace(/\s/g, "").toLowerCase();
     const randoNumber = Math.floor(Math.random() * 1000);

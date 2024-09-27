@@ -4,7 +4,7 @@ import userService from "../services/userServices.js";
 async function createUserController(req, res) {
   const body = req.body;
 
-  try {
+  try { 
     const token = await userService.createServices(body);
     return res.status(201).send(token);
   } catch (error) {
