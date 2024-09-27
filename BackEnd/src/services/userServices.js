@@ -18,17 +18,7 @@ const createServices = async (body) => {
 
   const token = authServices.generateToken(user.id);
 
-  return {
-    token,
-    user: {
-      id: user._id,
-      name,
-      username,
-      email,
-      avatar,
-      background,
-    },
-  };
+  return token;
 };
 
 const findAllServices = async () => {
