@@ -65,3 +65,28 @@ export const ErrorSpan = styled.span`
   font-size: .9rem;
   border-radius: 0.3rem;
 `
+export const UserLoggedSpace = styled.div`
+display: flex;
+align-items: center;
+justify-content: center;
+max-width: 100%;
+gap: 1rem;
+h2{
+  font-size: 1rem;
+  color: #19bdff;
+  transition: all 0.3s;
+  cursor: pointer;
+}
+h2:hover{
+  color: #757575;
+}
+.exit{
+  font-size: 1.5rem;
+  color: #19bdff;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.exit:hover{
+  color: #757575;
+}
+`
