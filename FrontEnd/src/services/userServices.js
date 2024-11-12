@@ -9,9 +9,9 @@ export function signup(data) {
     ...data,
     username:generateUserName(data.name),
     avatar:
-      "https://i.pinimg.com/originals/1b/8b/9d/1b8b9d6c3c6b4b3c4d4a1e6b1e5b4d2c.jpg",
+      "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png",
     background:
-      "https://i.pinimg.com/originals/1b/8b/9d/1b8b9d6c3c6b4b3c4d4a1e6b1e5b4d2c.jpg",
+      "https://cdn.pixabay.com/photo/2023/02/01/21/40/pink-7761356_960_720.png",
   };
   const response = axios.post(`${baseURL}/user/create`, body);
   return response;

@@ -12,7 +12,7 @@ const updateRepository = (id, body) =>
   User.findByIdAndUpdate({ _id: id }, { body }, {rawResult: true});
 
 export default {
-  findByEmail,
+  //cfindByEmail,
   createRepository,
   findAllRepository,
   findIdRepository,
