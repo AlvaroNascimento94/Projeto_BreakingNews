@@ -47,7 +47,7 @@ useEffect(()=>{
         </ProfileUser>
 
         <ProfileActions>
-          <Link to="/manage-news/add">
+          <Link to="/manage-news/add/news">
             <ProfileIconAdd>
               <HiOutlinePlusCircle />
             </ProfileIconAdd>

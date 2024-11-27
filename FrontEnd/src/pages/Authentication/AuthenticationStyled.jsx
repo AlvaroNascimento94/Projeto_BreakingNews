@@ -8,22 +8,15 @@ export const AuthContainer = styled.div`
   align-items: center;
   width: 70%;
   margin: 0 auto;
-
-  form {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    width: 100%;
-  }
 `;
 
 export const Section = styled.section`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  width: 100%;
+  width: 90%;
   height: 400px;
-  padding: 2rem;
+  padding: 2rem 4rem;
   gap: 1rem;
   background-color: ${(props) => (props.type === "signin" ? "blue" : "white")};
   color: ${(props) => (props.type === "signup" ? "blue" : "white")};
@@ -31,6 +24,14 @@ export const Section = styled.section`
     font-size: 2rem;
     text-align: center;
     font-weight: 700;
+  }
+  form {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 100%;
+    ;
   }
 `;
 export const Article = styled.article`

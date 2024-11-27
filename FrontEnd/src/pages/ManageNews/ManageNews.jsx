@@ -5,46 +5,91 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ErrorSpan } from "../../components/NavBar/NavBarStyled";
 import { Button } from "../../components/Button/Button";
-import { createNews } from "../../services/postServices";
+import {
+  createNews,
+  deleteNews,
+  editNews,
+  getNewsById,
+} from "../../services/postServices";
 import { Input } from "../../components/Input/Input";
+import { useEffect } from "react";
+import { set } from "zod";
 
 export function ManageNews() {
-  const { action } = useParams();
+  const { action, id } = useParams();
   const navigate = useNavigate();
   const {
     register: registerNews,
     handleSubmit: handleRegisterNews,
     formState: { errors: errorsRegisterNews },
+    setValue,
   } = useForm({ resolver: zodResolver(newsSchema) });
 
   async function registerNewsSubmit(data) {
     try {
-        await createNews(data);
-        navigate("/profile");
+      await createNews(data);
+      navigate("/profile");
     } catch (error) {
-        console.log(error);
-        
+      console.log(error);
+      console.log(error);
+
+      console.log(error);
     }
   }
 
   async function editNewsSubmit(data) {
-    /* try {
-        await editNews(data);
-        navigate("/profile");
+    try {
+      await editNews(data, id);
+      navigate("/profile");
     } catch (error) {
-        console.log(error);
-        
-    } */
+      console.log(error);
+    }
   }
+
+  async function findNewsId(id) {
+    try {
+      const { data } = await getNewsById(id);
+      setValue("title", data.title);
+      setValue("banner", data.banner);
+      setValue("text", data.text);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async function deleteNewsSubmit() {
+    try {
+      await deleteNews(id);
+      navigate("/profile");
+    } catch (error) {
+      console.log(error);
+      
+    }
+  }
+
+  useEffect(() => {
+    if (action === "edit" || action === "delete") {
+      findNewsId(id);
+    }
+  }, []);
 
   return (
     <AddNewsContainer>
-      <h2>{action == "add" ? "Adicionar Notícia" : "Atualizar Notícia"}</h2>
+      <h2>
+        {action == "add"
+          ? "Adicionar "
+          : action == "edit"
+          ? "Atualizar "
+          : "Apagar "}
+        Notícia
+      </h2>
       <form
         onSubmit={
           action == "add"
             ? handleRegisterNews(registerNewsSubmit)
-            : handleRegisterNews(editNewsSubmit)
+            : action == "edit"
+            ? handleRegisterNews(editNewsSubmit)
+            : handleRegisterNews(deleteNewsSubmit)
         }
       >
         <Input
@@ -52,7 +97,7 @@ export function ManageNews() {
           placeholder="Título"
           name="title"
           register={registerNews}
-          value={action !== "add" ? "title" : ""}
+          disabled={action === "delete"}
         />
         {errorsRegisterNews.title && (
           <ErrorSpan>{errorsRegisterNews.title.message}</ErrorSpan>
@@ -61,8 +106,8 @@ export function ManageNews() {
           type="text"
           placeholder="Link do banner"
           name="banner"
-          value={action !== "add" ? "banner link" : ""}
           register={registerNews}
+          disabled={action === "delete"}
         />
         {errorsRegisterNews.banner && (
           <ErrorSpan>{errorsRegisterNews.banner.message}</ErrorSpan>
@@ -72,17 +117,23 @@ export function ManageNews() {
           placeholder="Texto"
           name="text"
           isInput={false}
-          value={action !== "add" ? "text" : ""}
           register={registerNews}
-          />
-          {errorsRegisterNews.text && (
-            <ErrorSpan>{errorsRegisterNews.text.message}</ErrorSpan>
-          )}
+          disabled={action === "delete"}
+        />
+        {errorsRegisterNews.text && (
+          <ErrorSpan>{errorsRegisterNews.text.message}</ErrorSpan>
+        )}
 
-          <Button 
+        <Button
           type="submit"
-          text={action == "add" ? "Adicionar" : "Atualizar"}
-          />
+          text={
+            action == "add"
+              ? "Adicionar"
+              : action == "edit"
+              ? "Atualizar"
+              : "Apagar"
+          }
+        />
       </form>
     </AddNewsContainer>
   );

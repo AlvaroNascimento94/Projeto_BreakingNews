@@ -159,7 +159,7 @@ async function deleteNewsService(id, userId) {
 
   if (!news) throw new Error("News not found");
 
-  if (news.user._id != userId) throw new Error("You didn't create this news");
+  if (news.user._id != userId) throw new Error("You didn't delete this news");
 
   await newsRepositories.deleteNewsRepository(id);
 }
