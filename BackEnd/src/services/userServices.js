@@ -47,7 +47,7 @@ const findIdServices = async (userIdParam, userIdLogged) => {
   return user;
 };
 
-const updateServices = async (body, userId) => {
+const updateServices = async (body, userId, userLogged) => {
   const { name, username, email, password, avatar, background } = body;
 
   if (!name && !username && !email && !password && !avatar && !background)
@@ -55,11 +55,18 @@ const updateServices = async (body, userId) => {
 
   const user = await userRepositories.findIdRepository(userId);
 
-  if (user._id != userId) throw new Error("You cannot update this user");
+  if (user._id != userLogged) throw new Error("You cannot update this user");
 
   if (password) password = await bcrypt.hash(password, 10);
 
-  await userRepositories.updateRepository(userId, body);
+  await userRepositories.updateRepository(
+    userId,
+    name,
+    username,
+    email,
+    password,
+    avatar,
+    background);
 
   return { message: "User successfully updated!" };
 };

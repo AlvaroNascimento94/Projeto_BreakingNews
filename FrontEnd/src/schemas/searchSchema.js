@@ -6,5 +6,5 @@ export const searchSchema = z.object({
     .min(1, { message: "A pesquisa não pode ser vazia" })
     .refine((value) => !/^\s*$/.test(value), {
       message: "A pesquisa não pode conter apenas espaços",
-    }),
+    })
 });

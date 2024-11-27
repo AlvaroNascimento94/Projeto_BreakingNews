@@ -4,7 +4,7 @@ import userService from "../services/userServices.js";
 async function createUserController(req, res) {
   const body = req.body;
 
-  try { 
+  try {
     const token = await userService.createServices(body);
     return res.status(201).send(token);
   } catch (error) {
@@ -25,7 +25,7 @@ async function findUserByIdController(req, res) {
   const { id: userId } = req.params;
   const userIdLogged = req.userId;
   try {
-    const user = await userServices.findIdServices(userId, userIdLogged);
+    const user = await userService.findIdServices(userId, userIdLogged);
 
     return res.send(user);
   } catch (error) {
@@ -35,9 +35,10 @@ async function findUserByIdController(req, res) {
 
 async function updateUserController(req, res) {
   const body = req.body;
-  const userId = req.userId;
+  const { id: userId } = req.params;
+  const userLogged = req.userId;
   try {
-    const response = await userService.updateServices(body, userId);
+    const response = await userService.updateServices(body, userId, userLogged);
 
     res.send(response);
   } catch (error) {

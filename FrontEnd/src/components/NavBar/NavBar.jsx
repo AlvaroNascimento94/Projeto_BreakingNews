@@ -70,8 +70,8 @@ export function NavBar() {
         </Link>
         {user ? (
           <UserLoggedSpace>
-            <Link to="/profile">
-            <h2>{user.name}</h2>
+            <Link to="/profile" style={{textDecoration:'none'}}>
+              <h2>{user.name}</h2>
             </Link>
             <BsBoxArrowRight onClick={singout} className="exit"/>
           </UserLoggedSpace>
